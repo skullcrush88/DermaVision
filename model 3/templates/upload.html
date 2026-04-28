@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DermaVision - Skin Disease Detection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #e0e0e0;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #a0a0a0;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+      }
+
+      li {
+        background-color: rgba(100, 200, 255, 0.1);
+        color: #64c8ff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid rgba(100, 200, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      li:hover {
+        background-color: rgba(100, 200, 255, 0.15);
+        border-color: rgba(100, 200, 255, 0.4);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 40px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+
+      .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        border: 2px dashed rgba(100, 200, 255, 0.3);
+        border-radius: 8px;
+        padding: 30px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: rgba(100, 200, 255, 0.02);
+      }
+
+      .file-input-wrapper:hover {
+        border-color: rgba(100, 200, 255, 0.6);
+        background-color: rgba(100, 200, 255, 0.05);
+      }
+
+      .file-input-wrapper:active {
+        background-color: rgba(100, 200, 255, 0.1);
+      }
+
+      input[type="file"] {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+      }
+
+      .file-input-label {
+        display: block;
+        font-size: 1rem;
+        color: #e0e0e0;
+        font-weight: 500;
+        pointer-events: none;
+      }
+
+      .file-input-hint {
+        font-size: 0.85rem;
+        color: #808080;
+        margin-top: 8px;
+        pointer-events: none;
+      }
+
+      input[type="submit"] {
+        font-size: 1rem;
+        padding: 14px 32px;
+        border: none;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #64c8ff 0%, #4db8ff 100%);
+        color: #000;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(100, 200, 255, 0.3);
+      }
+
+      input[type="submit"]:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(100, 200, 255, 0.4);
+      }
+
+      input[type="submit"]:active:not(:disabled) {
+        transform: translateY(0px);
+      }
+
+      input[type="submit"]:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: 0 4px 15px rgba(100, 200, 255, 0.2);
+      }
+
+      .loading-state {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        color: #64c8ff;
+        font-weight: 500;
+      }
+
+      .loading-state.active {
+        display: flex;
+      }
+
+      .spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(100, 200, 255, 0.3);
+        border-top-color: #64c8ff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        form {
+          padding: 30px 20px;
+        }
+
+        .file-input-wrapper {
+          padding: 25px 15px;
+        }
+
+        ul {
+          gap: 8px;
+        }
+
+        li {
+          font-size: 0.75rem;
+          padding: 6px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>DermaVision</h1>
+        <h2>Skin Disease Detection</h2>
+      </div>
+
+      <div>
+        <h2>Detectable Diseases</h2>
+        <ul>
+          <li>Acne and Rosacea</li>
+          <li>Actinic Keratosis</li>
+          <li>Atopic Dermatitis</li>
+          <li>Bullous Disease</li>
+          <li>Cellulitis</li>
+          <li>Eczema</li>
+          <li>Exanthems and Drug Eruptions</li>
+          <li>Hair Loss Alopecia</li>
+          <li>Herpes HPV</li>
+          <li>Light Diseases</li>
+          <li>Lupus</li>
+          <li>Melanoma Skin Cancer</li>
+          <li>Nail Fungus</li>
+          <li>Poison Ivy</li>
+          <li>Psoriasis</li>
+          <li>Scabies Lyme Disease</li>
+          <li>Seborrheic Keratoses</li>
+          <li>Systemic Disease</li>
+          <li>Tinea Ringworm</li>
+          <li>Urticaria Hives</li>
+          <li>Vascular Tumors</li>
+          <li>Vasculitis</li>
+          <li>Warts Molluscum</li>
+        </ul>
+      </div>
+
+      <form action="/" method="post" enctype="multipart/form-data" id="upload-form">
+        <div class="file-input-wrapper">
+          <input type="file" name="file" required id="file-input" accept="image/*" />
+          <label for="file-input" class="file-input-label">
+            Choose an image or drag & drop
+          </label>
+          <p class="file-input-hint">JPG, PNG • Max 10MB</p>
+        </div>
+        <div class="loading-state" id="loading-state">
+          <div class="spinner"></div>
+          <span>Analyzing image...</span>
+        </div>
+        <input type="submit" value="Analyze Image" id="submit-btn" />
+      </form>
+
+      <script>
+        const form = document.getElementById('upload-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const loadingState = document.getElementById('loading-state');
+
+        form.addEventListener('submit', function() {
+          submitBtn.disabled = true;
+          loadingState.classList.add('active');
+        });
+      </script>
+    </div>
+  </body>
+</html>

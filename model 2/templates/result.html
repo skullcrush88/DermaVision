@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediction Result - DermaVision</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #e0e0e0;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #a0a0a0;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 20px;
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+      }
+
+      li {
+        background-color: rgba(100, 200, 255, 0.1);
+        color: #64c8ff;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid rgba(100, 200, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      li:hover {
+        background-color: rgba(100, 200, 255, 0.15);
+        border-color: rgba(100, 200, 255, 0.4);
+      }
+
+      .result-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 40px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+
+      .result-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 20px;
+      }
+
+      .result-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #a0a0a0;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 15px;
+      }
+
+      .prediction-result {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #64c8ff;
+        line-height: 1.2;
+        word-wrap: break-word;
+      }
+
+      span {
+        font-weight: 700;
+        color: #64c8ff;
+      }
+
+      .result-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .prediction-link {
+        font-size: 0.95rem;
+        color: #64c8ff;
+        text-decoration: none;
+        padding: 12px 16px;
+        border: 1px solid rgba(100, 200, 255, 0.3);
+        border-radius: 6px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background-color: rgba(100, 200, 255, 0.05);
+      }
+
+      .prediction-link:hover {
+        background-color: rgba(100, 200, 255, 0.15);
+        border-color: rgba(100, 200, 255, 0.6);
+        text-decoration: none;
+      }
+
+      .upload-link {
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #64c8ff 0%, #4db8ff 100%);
+        font-size: 0.95rem;
+        color: #000;
+        border-radius: 6px;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(100, 200, 255, 0.3);
+        display: inline-block;
+        align-self: center;
+      }
+
+      .upload-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(100, 200, 255, 0.4);
+        text-decoration: none;
+      }
+
+      .upload-link:active {
+        transform: translateY(0px);
+      }
+
+      .info-section {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 25px;
+        margin-top: 20px;
+      }
+
+      .info-section-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #64c8ff;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 12px;
+      }
+
+      .info-content {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #d0d0d0;
+      }
+
+      .risk-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 10px;
+        letter-spacing: 0.5px;
+      }
+
+      .risk-low {
+        background-color: rgba(76, 175, 80, 0.2);
+        color: #81c784;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+      }
+
+      .risk-medium {
+        background-color: rgba(255, 193, 7, 0.2);
+        color: #ffd54f;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+      }
+
+      .risk-high {
+        background-color: rgba(244, 67, 54, 0.2);
+        color: #ef5350;
+        border: 1px solid rgba(244, 67, 54, 0.3);
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .result-container {
+          padding: 30px 20px;
+        }
+
+        .prediction-result {
+          font-size: 1.8rem;
+        }
+
+        ul {
+          gap: 8px;
+        }
+
+        li {
+          font-size: 0.75rem;
+          padding: 6px 12px;
+        }
+
+        .info-content {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>DermaVision</h1>
+        <p class="subtitle">Prediction Result</p>
+      </div>
+
+      <div>
+        <p class="subtitle">Detectable Diseases</p>
+        <ul>
+          <li>Eczema</li>
+          <li>Melanoma</li>
+          <li>Atopic Dermatitis</li>
+          <li>Basal Cell Carcinoma</li>
+          <li>Melanocytic Nevi</li>
+          <li>Benign Keratosis</li>
+          <li>Psoriasis</li>
+          <li>Seborrheic Keratoses</li>
+          <li>Tinea Ringworm</li>
+          <li>Warts Molluscum</li>
+        </ul>
+      </div>
+
+      <div class="result-container">
+        <div class="result-header">
+          <p class="result-title">Analysis Result</p>
+          <p class="prediction-result">{{ prediction }}</p>
+          
+          <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; align-items: center;">
+            <span class="risk-badge risk-{{ risk.lower() }}">Risk Level: {{ risk }}</span>
+            <span style="background: rgba(100, 200, 255, 0.15); padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; color: #64c8ff; border: 1px solid rgba(100, 200, 255, 0.3);">Confidence: {{ confidence }}%</span>
+          </div>
+          
+          <p style="margin-top: 12px; font-size: 0.9rem; color: #a0a0a0; font-style: italic;">{{ confidence_text }}</p>
+        </div>
+
+        <div class="info-section">
+          <p class="info-section-title">About This Condition</p>
+          <p class="info-content">{{ description }}</p>
+        </div>
+
+        <div class="info-section">
+          <p class="info-section-title">Care Tips</p>
+          <p class="info-content">{{ tips }}</p>
+        </div>
+
+        <div class="info-section">
+          <p class="info-section-title">When to See a Doctor</p>
+          <p class="info-content">{{ advice }}</p>
+        </div>
+
+        <div class="result-footer">
+          <a
+            class="prediction-link"
+            href="https://en.wikipedia.org/wiki/{{ prediction }}"
+            target="_blank"
+          >
+            Learn more on Wikipedia ↗
+          </a>
+          <a class="upload-link" href="/">Analyze Another Image</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+</html>

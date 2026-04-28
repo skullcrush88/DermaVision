@@ -6,7 +6,7 @@
 ![GitHub License](https://img.shields.io/github/license/RanitManik/DermaVision)
 ![wakatime](https://wakatime.com/badge/github/RanitManik/DermaVision.svg)
 
-DermaVision is a Flask-based application developed to detect various skin diseases using deep learning models. This project was created as part of a college initiative by **Ranit Kumar Manik**, **Mohammad**, **Sayak Bal**, and **Partha Sarathi Manna**. It features three distinct models, each trained on different datasets using PyTorch to identify 5, 10, and 23 skin diseases, respectively.
+DermaVision is a Flask-based application developed to detect various skin diseases using deep learning models. This project was created as part of a college initiative and features three distinct models, each trained on different datasets using PyTorch to identify 5, 10, and 23 skin diseases, respectively.
 
 ## Table of Contents
 

@@ -17,7 +17,6 @@ DermaVision is a Flask-based application developed to detect various skin diseas
 - [Using the Pre-trained Models](#using-the-pre-trained-models)
 - [Training the Models](#training-the-models)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Pre-trained Models
@@ -89,32 +88,8 @@ DermaVision/
 
 For more details, refer to the [Project Structure Documentation](docs/project%20structure.md).
 
-## Contributing
-
-We welcome contributions to this project! To contribute, please follow these steps:
-
-1. **Fork the repository**: Click the "Fork" button at the top right of this page to create a copy of the repository under your GitHub account.
-2. **Clone the repository**: Clone your forked repository to your local machine:
-    ```bash
-    git clone https://github.com/RanitManik/DermaVision.git
-    ```
-3. **Create a new branch**: Create a new branch for your feature or bug fix:
-    ```bash
-    git checkout -b feature-or-bugfix-name
-    ```
-4. **Make your changes**: Implement your changes to the codebase.
-5. **Commit your changes**: Commit your changes with a descriptive message:
-    ```bash
-    git commit -m "Description of your changes"
-    ```
-6. **Push to your branch**: Push your changes to your forked repository:
-    ```bash
-    git push origin feature-or-bugfix-name
-    ```
-7. **Create a Pull Request**: Open a pull request from your forked repository’s branch to the `main` branch of the original repository.
-
-For detailed contribution guidelines, please refer to the [CONTRIBUTING.md](.github/CONTRIBUTING.md) file.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
